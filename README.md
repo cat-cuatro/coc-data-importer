@@ -21,3 +21,9 @@ Install pre-commit and pre-push hooks:
 pre-commit install -t pre-commit
 pre-commit install -t pre-push
 ```
+
+Run the application:
+
+```bash
+python -m app
+```
