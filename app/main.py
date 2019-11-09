@@ -5,5 +5,5 @@ def run():
 
     :return: Integer value used for testing.
     """
-    print("Running")
+    print("Done.")
     return 1234567890
