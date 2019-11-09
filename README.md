@@ -27,3 +27,9 @@ Run the application:
 ```bash
 python -m app
 ```
+
+Test the application:
+
+```bash
+pytest
+```
