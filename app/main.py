@@ -1,9 +1,9 @@
+import pandas as pd
+
+
 def run():
     """Entry point for the application.
 
-    Prints string to the console to prove that is has executed.
-
-    :return: Integer value used for testing.
+    :return: DataFrame representation of a CSV file
     """
-    print("Done.")
-    return 1234567890
+    return pd.read_csv("data/faculty.csv")
