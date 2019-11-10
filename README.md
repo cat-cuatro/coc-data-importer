@@ -33,3 +33,12 @@ Test the application:
 ```bash
 pytest
 ```
+
+## How to Override Environment Variables
+
+Instead of changing the code to override environment variables, it is enough to create an `.env` file with the desired environment variables.
+This file will be automatically loaded on startup, and the environment variables populated.
+
+See [settings.py](./app/settings.py) for a list of environment variables that can be overriden.
+
+Note that the `.env` file should **NOT** be checked in into the repo, as it may potentially contain secrets.
