@@ -9,7 +9,7 @@ This application is a POC (Proof of Concept) for a service that aims to extract 
 Install the required packages:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Pre-commit hooks are actions that execute before or after a hook.
@@ -25,7 +25,7 @@ pre-commit install -t pre-push
 Run the application:
 
 ```bash
-python -m app
+python3 -m app
 ```
 
 Test the application:
