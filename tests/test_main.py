@@ -6,7 +6,7 @@ from app import main
 
 
 @mock.patch("pandas.read_csv")
-def test_main_returns_dataframe(read_csv_mock):
+def test_main_returns_faculty_count_and_names(read_csv_mock):
     # arrange
     mock_data = {
         "Name": pd.Series(["Alice", "Bob"]),
@@ -18,8 +18,9 @@ def test_main_returns_dataframe(read_csv_mock):
     read_csv_mock.return_value = expected
 
     # act
-    result = main.run()
+    count, names = main.run()
 
     # assert
     read_csv_mock.assert_called_once()
-    pd.testing.assert_frame_equal(expected, result)
+    assert count == 2
+    assert names == ["Alice", "Bob"]
