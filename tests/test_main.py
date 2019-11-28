@@ -1,26 +1,18 @@
 from unittest import mock
 
-import pandas as pd
-
 from app import main
 
 
-@mock.patch("pandas.read_csv")
-def test_main_returns_faculty_count_and_names(read_csv_mock):
-    # arrange
-    mock_data = {
-        "Name": pd.Series(["Alice", "Bob"]),
-        "Email": pd.Series(["alice@pdx.edu", "bob@pdx.edu"]),
-        "Phone": pd.Series(["555-55-5555", "777-77-7777"]),
-        "Department": pd.Series(["Computer Science", "Anthropology"]),
-    }
-    expected = pd.DataFrame(mock_data)
-    read_csv_mock.return_value = expected
+@mock.patch("app.main.load")
+@mock.patch("app.main.transform")
+@mock.patch("app.main.extract")
+def test_main_runs_etl(mock_extract, mock_transform, mock_load):
+    mock_extract.return_value = None
+    mock_transform.return_value = None
+    mock_load.return_value = None
 
-    # act
-    count, names = main.run()
+    main.run()
 
-    # assert
-    read_csv_mock.assert_called_once()
-    assert count == 2
-    assert names == ["Alice", "Bob"]
+    mock_extract.assert_called_once()
+    mock_transform.assert_called_once()
+    mock_load.assert_called_once()
