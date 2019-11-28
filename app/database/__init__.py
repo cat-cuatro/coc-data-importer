@@ -23,5 +23,11 @@ class DataAccessLayer:
     def table_exists(self, name):
         return self.engine.dialect.has_table(self.engine, name)
 
+    def close(self):
+        if not self.Base or not self.engine:
+            return
+
+        self.Base.metadata.drop_all(self.engine)
+
 
 dal = DataAccessLayer()
