@@ -12,6 +12,7 @@ class Faculty(dal.Base):
 
     faculty_id = Column("faculty_id", Integer, primary_key=True, autoincrement=True)
     full_name = Column("full_name", String, nullable=False)
+    email = Column("email", String, nullable=False)
     job_title = Column("job_title", String, nullable=False)
     senate_division = Column("senate_division", String, nullable=False)
     department_id = Column(
@@ -23,6 +24,7 @@ class Faculty(dal.Base):
         return (
             f"<faculty(id={self.faculty_id}, "
             f"full_name={self.full_name}, "
+            f"email={self.full_name}, "
             f"job_title={self.job_title}, "
             f"senate_division={self.senate_division}, "
             f"department_id={self.department_id}, "

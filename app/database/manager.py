@@ -17,10 +17,7 @@ class CommitteeManager:
 
         if committee_record is None:
             committee_record = Committee(name=name, description=description)
-            # committee_record = CommitteeManager.create_committee(name, description)
             dal.DBSession.add(committee_record)
-            # dal.DBSession.flush()
-            # dal.DBSession.commit()
 
         dal.DBSession.commit()
 
@@ -36,8 +33,6 @@ class DepartmentManager:
 
         if department_record is None:
             department_record = Department(name=name, description=description)
-            print(f"Adding department with name '{name}'")
-            # department_record = DepartmentManager.create_department(name, description)
             dal.DBSession.add(department_record)
 
         dal.DBSession.commit()
@@ -47,29 +42,14 @@ class DepartmentManager:
 
 class FacultyManager:
     @staticmethod
-    def add_faculty(full_name, job_title, senate_division, department_id):
-        # department_id = (
-        #     dal.DBSession.query(Department.department_id)
-        #     .filter(Department.name == department_name)
-        #     .scalar()
-        # )
-
-        # if not department_id:
-        #     # TODO: how to get department_id from the result of add_department?
-        #     DepartmentManager.add_department(department_name, department_description)
-        #     department_id = (
-        #         dal.DBSession.query(Department.department_id)
-        #         .filter(Department.name == department_name)
-        #         .scalar()
-        #     )
-
+    def add_faculty(full_name, email, job_title, senate_division, department_id):
         faculty_record = (
             dal.DBSession.query(Faculty).filter(Faculty.full_name == full_name).first()
         )
 
         if faculty_record is None:
             faculty_record = FacultyManager.create_faculty(
-                full_name, job_title, senate_division, department_id
+                full_name, email, job_title, senate_division, department_id
             )
             dal.DBSession.add(faculty_record)
 
@@ -78,9 +58,10 @@ class FacultyManager:
         return faculty_record
 
     @staticmethod
-    def create_faculty(full_name, job_title, senate_division, department_id):
+    def create_faculty(full_name, email, job_title, senate_division, department_id):
         return Faculty(
             full_name=full_name,
+            email=email,
             job_title=job_title,
             senate_division=senate_division,
             department_id=department_id,
@@ -107,12 +88,8 @@ class SurveyChoiceManager:
                 committee_id=committee_id,
                 choice_priority=choice_priority,
             )
-            # survey_choice_record = SurveyChoiceManager.create_survey_choice(
-            #     faculty_id, committee_id, choice_priority
-            # )
-            dal.DBSession.add(survey_choice_record)
 
-        # dal.DBSession.commit()
+            dal.DBSession.add(survey_choice_record)
 
         return survey_choice_record
 

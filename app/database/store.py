@@ -8,7 +8,7 @@ from app.database.manager import SurveyDataManager
 def save_to_database(data):
     committee_preferred = data["committee_preferred"]
     choice = data["choice"]
-    # email = data["email"]
+    email = data["email"]
     name = data["name"]
     senate_division = data["senate_division"]
     department_name = data["department"]
@@ -25,7 +25,7 @@ def save_to_database(data):
     department_id = department_record.department_id
 
     faculty_record = FacultyManager.add_faculty(
-        name, job_title, senate_division, department_id
+        name, email, job_title, senate_division, department_id
     )
     faculty_id = faculty_record.faculty_id
 

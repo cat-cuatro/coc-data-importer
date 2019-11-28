@@ -47,7 +47,11 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_id = department_record.department_id
 
         expected = FacultyManager.add_faculty(
-            "test-full-name", "test-job-title", "test-senate-division", department_id
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
         )
         actual = (
             dal.DBSession.query(Faculty)
@@ -57,6 +61,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
         assert actual.faculty_id == expected.faculty_id
         assert actual.full_name == expected.full_name
+        assert actual.email == expected.email
         assert actual.job_title == expected.job_title
         assert actual.senate_division == expected.senate_division
         assert actual.department_id == expected.department_id
@@ -65,7 +70,11 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_record = DepartmentManager.add_department("test-department")
         department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name", "test-job-title", "test-senate-division", department_id
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
         )
         faculty_id = faculty_record.faculty_id
         committee_record = CommitteeManager.add_committee("test-committee")
@@ -90,7 +99,11 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_record = DepartmentManager.add_department("test-department")
         department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name", "test-job-title", "test-senate-division", department_id
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
         )
         faculty_id = faculty_record.faculty_id
         committee_record = CommitteeManager.add_committee("test-committee")
@@ -114,7 +127,11 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_record = DepartmentManager.add_department("test-department")
         department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name", "test-job-title", "test-senate-division", department_id
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
         )
         faculty_id = faculty_record.faculty_id
 
@@ -133,7 +150,11 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_record = DepartmentManager.add_department("test-department")
         department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name", "test-job-title", "test-senate-division", department_id
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
         )
         faculty_id = faculty_record.faculty_id
 
