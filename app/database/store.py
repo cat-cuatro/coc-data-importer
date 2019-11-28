@@ -3,6 +3,7 @@ from app.database.manager import DepartmentManager
 from app.database.manager import FacultyManager
 from app.database.manager import SurveyChoiceManager
 from app.database.manager import SurveyDataManager
+from app.logger import logger
 
 
 def save_to_database(data):
@@ -15,6 +16,8 @@ def save_to_database(data):
     job_title = data["job_title"]
     is_interested = data["is_interested"]
     expertise = data["expertise"]
+
+    logger.debug(f"Saving committee preferences for {name}")
 
     committee_id = None
     if committee_preferred:
