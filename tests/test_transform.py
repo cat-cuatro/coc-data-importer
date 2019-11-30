@@ -12,7 +12,8 @@ test_row = {
     "Department": "CS Math Office",
     "Job Title": "MTH UP Assistant Professor",
     "Able to serve": "I am interested in committee work",
-    "expertise, interest, or previous experience pertaining to the preferences indicated": "Some valid expertise",  # noqa: E501
+    "expertise, interest, or previous experience pertaining to the "
+    "preferences indicated": "Some valid expertise",
 }
 valid_rows = [
     "committee_preferred",
