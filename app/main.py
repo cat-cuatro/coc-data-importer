@@ -1,23 +1,16 @@
-import pandas as pd
-
-from app import settings
-from app.database import dal
-from app.database import query
+from app.extract import extract
+from app.load import load
+from app.transform import transform
 
 
 def run():
     """Entry point for the application.
 
-    Loads CSV faculty data and stores it into a database.
+    Extract data from an Excel spreadsheet, transforming and sanitizing it,
+    and then loading it onto a database.
 
-    :return: Count of faculty members and list of faculty names
+    :return: None
     """
-    dal.db_init()
-    df = pd.read_csv(settings.DATA_CSV)
-    df.to_sql("Faculty", con=dal.engine, index_label="FacultyId", if_exists="replace")
-
-    faculty_count = query.faculty_count()
-    faculty_names = query.faculty_names()
-
-    dal.DBSession.close()
-    return faculty_count, faculty_names
+    extracted = extract()
+    transformed = transform(extracted)
+    load(transformed)
