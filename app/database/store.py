@@ -3,6 +3,8 @@ from app.database.manager import DepartmentManager
 from app.database.manager import FacultyManager
 from app.database.manager import SurveyChoiceManager
 from app.database.manager import SurveyDataManager
+from app.database.manager import DepartmentAssociationsManager
+from app.database.manager import SenateDivisionManager
 from app.logger import logger
 
 
@@ -35,3 +37,7 @@ def save_to_database(data):
     SurveyChoiceManager.add_survey_choice(faculty_id, committee_id, choice)
 
     SurveyDataManager.add_survey_data(faculty_id, is_interested, expertise)
+
+    SenateDivisionManager.add_senate_division(senate_division)
+
+    DepartmentAssociationsManager.add_department_association(email, department_id)
