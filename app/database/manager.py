@@ -6,6 +6,8 @@ from app.database.entities import Department
 from app.database.entities import Faculty
 from app.database.entities import SurveyChoice
 from app.database.entities import SurveyData
+from app.database.entities import SenateDivision
+from app.database.entities import DepartmentAssociations
 
 
 class CommitteeManager:
@@ -129,4 +131,60 @@ class SurveyDataManager:
             faculty_id=faculty_id,
             is_interested=is_interested,
             expertise=expertise,
+        )
+
+
+class SenateDivisionManager:
+    @staticmethod
+    def add_senate_division(short_name, name=None):
+        senate_division_record = (
+            dal.DBSession.query(SenateDivision)
+            .filter(SenateDivision.senate_division_short_name == short_name)
+            .first()
+        )
+
+        if senate_division_record is None:
+            senate_division_record = SenateDivisionManager.create_senate_division(
+                short_name, name
+            )
+            dal.DBSession.add(senate_division_record)
+
+        dal.DBSession.commit()
+
+        return senate_division_record
+
+    @staticmethod
+    def create_senate_division(short_name, name):
+        return SenateDivision(
+            senate_division_short_name=short_name,
+            name=name,
+        )
+
+
+class DepartmentAssociationsManager:
+    @staticmethod
+    def add_department_association(email, department_id):
+        department_association_record = (
+            dal.DBSession.query(DepartmentAssociations)
+            .filter(DepartmentAssociations.email == email,
+                    DepartmentAssociations.department_id == department_id)
+            .first()
+        )
+
+        if department_association_record is None:
+            department_association_record = DepartmentAssociationsManager\
+                .create_department_association(
+                    email, department_id
+                )
+            dal.DBSession.add(department_association_record)
+
+        dal.DBSession.commit()
+
+        return department_association_record
+
+    @staticmethod
+    def create_department_association(email, department_id):
+        return DepartmentAssociations(
+            email=email,
+            department_id=department_id,
         )
