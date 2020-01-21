@@ -6,11 +6,15 @@ from app.database.entities import Department
 from app.database.entities import Faculty
 from app.database.entities import SurveyChoice
 from app.database.entities import SurveyData
+from app.database.entities import SenateDivision
+from app.database.entities import DepartmentAssociations
 from app.database.manager import CommitteeManager
 from app.database.manager import DepartmentManager
 from app.database.manager import FacultyManager
 from app.database.manager import SurveyChoiceManager
 from app.database.manager import SurveyDataManager
+from app.database.manager import SenateDivisionManager
+from app.database.manager import DepartmentAssociationsManager
 
 
 class TestDatabaseQueryManager(unittest.TestCase):
@@ -168,3 +172,45 @@ class TestDatabaseQueryManager(unittest.TestCase):
         assert actual.faculty_id == expected.faculty_id
         assert actual.is_interested == expected.is_interested
         assert actual.expertise == expected.expertise
+
+    def test_senate_division_manager_adds_data_to_database(self):
+        senate_division_record = SenateDivisionManager.add_senate_division("TSD", "test-senate-division")
+
+        expected = SenateDivisionManager.add_senate_division("TSD", "test-senate-division")
+        actual = (
+            dal.DBSession.query(SenateDivision)
+            .filter(
+                SenateDivision.senate_division_short_name == "TSD",
+                SenateDivision.name == "test-senate-division"
+            )
+            .first()
+        )
+
+        assert actual.senate_division_short_name == expected.senate_division_short_name
+        assert actual.name == expected.name
+
+    def test_department_associations_manager_adds_data_to_database(self):
+        department_record = DepartmentManager.add_department("test-department")
+        department_id = department_record.department_id
+        faculty_record = FacultyManager.add_faculty(
+            "test-full-name",
+            "test-email",
+            "test-job-title",
+            "test-senate-division",
+            department_id,
+        )
+        faculty_email = faculty_record.email
+        department_association_record = DepartmentAssociationsManager.add_department_association(faculty_email, department_id)
+
+        expected = DepartmentAssociationsManager.add_department_association(faculty_email, department_id)
+        actual = (
+            dal.DBSession.query(DepartmentAssociations)
+            .filter(
+                DepartmentAssociations.email == faculty_email,
+                DepartmentAssociations.department_id == department_id
+            )
+            .first()
+        )
+
+        assert actual.department_id == expected.department_id
+        assert actual.email == expected.email
