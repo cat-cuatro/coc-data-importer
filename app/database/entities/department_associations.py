@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from app.database import dal
 
 
-class DepartmentAssociations(dal.base):
+class DepartmentAssociations(dal.Base):
     __tablename__ = "department_associations"
 
     email = Column(

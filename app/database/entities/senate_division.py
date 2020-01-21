@@ -4,7 +4,7 @@ from sqlalchemy import String
 from app.database import dal
 
 
-class SenateDivision(dal.base):
+class SenateDivision(dal.Base):
     __tablename__ = "senate_division"
 
     senate_division_short_name = Column(
