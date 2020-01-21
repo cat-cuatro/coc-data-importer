@@ -7,7 +7,8 @@ from app.database.entities import Department
 from app.database.entities import Faculty
 from app.database.entities import SurveyChoice
 from app.database.entities import SurveyData
-
+from app.database.entities import SenateDivision
+from app.database.entities import DepartmentAssociations
 
 class TestDatabaseStore(unittest.TestCase):
     def setUp(self):
@@ -181,3 +182,60 @@ class TestDatabaseStore(unittest.TestCase):
         assert survey_data_record.faculty_id == 1
         assert survey_data_record.is_interested is True
         assert survey_data_record.expertise == "test-expertise"
+
+    def test_save_to_database_saves_senate_division_with_short_name(self):
+        data = {
+            "committee_preferred": None,
+            "choice": None,
+            "email": "johndoe@mail.com",
+            "name": "John Doe",
+            "senate_division": "test-senate-division",
+            "department": "test-department",
+            "job_title": "test-job-title",
+            "is_interested": True,
+            "expertise": "test-expertise",
+        }
+
+        store.save_to_database(data)
+
+        senate_division_query = dal.DBSession.query(SenateDivision)
+        senate_division_record = senate_division_query.first()
+
+        assert senate_division_query.count() == 1
+        assert senate_division_record.senate_division_short_name == "test-senate-division"
+
+    def test_save_to_database_saves_department_association(self):
+        data = {
+            "committee_preferred": None,
+            "choice": None,
+            "email": "johndoe@mail.com",
+            "name": "John Doe",
+            "senate_division": "test-senate-division",
+            "department": "test-department",
+            "job_title": "test-job-title",
+            "is_interested": True,
+            "expertise": "test-expertise",
+        }
+
+        store.save_to_database(data)
+        faculty_query = dal.DBSession.query(Faculty).filter(
+            Faculty.email == "johndoe@mail.com"
+        )
+        faculty_record = faculty_query.first()
+
+        department_query = dal.DBSession.query(Department).filter(
+            Department.name == "test-department"
+        )
+        department_record = department_query.first()
+
+        department_association_query = dal.DBSession.query(DepartmentAssociations).filter(
+            DepartmentAssociations.email == faculty_record.email,
+            DepartmentAssociations.department_id == department_record.department_id,
+        )
+
+        department_association_record = department_association_query.first()
+
+        assert department_association_query.count() == 1
+        assert department_association_record.department_id == 1
+        assert department_association_record.email == "johndoe@mail.com"
+
