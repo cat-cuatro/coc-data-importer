@@ -44,14 +44,14 @@ class DepartmentManager:
 
 class FacultyManager:
     @staticmethod
-    def add_faculty(full_name, email, job_title, senate_division, department_id):
+    def add_faculty(full_name, email, job_title, senate_division):
         faculty_record = (
-            dal.DBSession.query(Faculty).filter(Faculty.full_name == full_name).first()
+            dal.DBSession.query(Faculty).filter(Faculty.email == email).first()
         )
 
         if faculty_record is None:
             faculty_record = FacultyManager.create_faculty(
-                full_name, email, job_title, senate_division, department_id
+                full_name, email, job_title, senate_division
             )
             dal.DBSession.add(faculty_record)
 
@@ -60,25 +60,24 @@ class FacultyManager:
         return faculty_record
 
     @staticmethod
-    def create_faculty(full_name, email, job_title, senate_division, department_id):
+    def create_faculty(full_name, email, job_title, senate_division):
         return Faculty(
             full_name=full_name,
             email=email,
             job_title=job_title,
-            senate_division=senate_division,
-            department_id=department_id,
+            senate_division_short_name=senate_division,
         )
 
 
 class SurveyChoiceManager:
     @staticmethod
-    def add_survey_choice(faculty_id, committee_id, choice_priority=None):
+    def add_survey_choice(email, committee_id, choice_id=None):
         survey_choice_record = (
             dal.DBSession.query(SurveyChoice)
             .filter(
-                SurveyChoice.faculty_id == faculty_id,
+                SurveyChoice.email == email,
                 SurveyChoice.committee_id == committee_id,
-                SurveyChoice.choice_priority == choice_priority,
+                SurveyChoice.choice_id == choice_id,
             )
             .first()
         )
@@ -86,9 +85,9 @@ class SurveyChoiceManager:
         if survey_choice_record is None:
             survey_choice_record = SurveyChoice(
                 survey_date=datetime.now(),
-                faculty_id=faculty_id,
+                email=email,
                 committee_id=committee_id,
-                choice_priority=choice_priority,
+                choice_id=choice_id,
             )
 
             dal.DBSession.add(survey_choice_record)
@@ -96,12 +95,12 @@ class SurveyChoiceManager:
         return survey_choice_record
 
     @staticmethod
-    def create_survey_choice(faculty_id, committee_id, choice_priority):
+    def create_survey_choice(email, committee_id, choice_id):
         return SurveyChoice(
             survey_date=datetime.now(),
-            faculty_id=faculty_id,
+            email=email,
             committee_id=committee_id,
-            choice_priority=choice_priority,
+            choice_id=choice_id,
         )
 
 

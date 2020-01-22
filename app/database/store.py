@@ -30,13 +30,13 @@ def save_to_database(data):
     department_id = department_record.department_id
 
     faculty_record = FacultyManager.add_faculty(
-        name, email, job_title, senate_division, department_id
+        name, email, job_title, senate_division
     )
-    faculty_id = faculty_record.faculty_id
+    faculty_email = faculty_record.email
 
-    SurveyChoiceManager.add_survey_choice(faculty_id, committee_id, choice)
+    SurveyChoiceManager.add_survey_choice(faculty_email, committee_id, choice)
 
-    SurveyDataManager.add_survey_data(faculty_id, is_interested, expertise)
+    SurveyDataManager.add_survey_data(faculty_email, is_interested, expertise)
 
     SenateDivisionManager.add_senate_division(senate_division)
 

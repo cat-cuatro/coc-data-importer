@@ -49,55 +49,46 @@ class TestDatabaseQueryManager(unittest.TestCase):
         assert actual.name == expected.name
 
     def test_faculty_manager_adds_data_to_database(self):
-        department_record = DepartmentManager.add_department("test-department")
-        department_id = department_record.department_id
-
         expected = FacultyManager.add_faculty(
             "test-full-name",
             "test-email",
             "test-job-title",
             "test-senate-division",
-            department_id,
         )
         actual = (
             dal.DBSession.query(Faculty)
-            .filter(Faculty.full_name == "test-full-name")
+            .filter(Faculty.email == "test-email")
             .first()
         )
 
-        assert actual.faculty_id == expected.faculty_id
         assert actual.full_name == expected.full_name
         assert actual.email == expected.email
         assert actual.job_title == expected.job_title
-        assert actual.senate_division == expected.senate_division
-        assert actual.department_id == expected.department_id
+        assert actual.senate_division_short_name == expected.senate_division_short_name
 
     def test_survey_choice_manager_adds_data_to_database(self):
-        department_record = DepartmentManager.add_department("test-department")
-        department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
             "test-full-name",
             "test-email",
             "test-job-title",
             "test-senate-division",
-            department_id,
         )
-        faculty_id = faculty_record.faculty_id
+        faculty_email = faculty_record.email
         committee_record = CommitteeManager.add_committee("test-committee")
         committee_id = committee_record.committee_id
 
-        expected = SurveyChoiceManager.add_survey_choice(faculty_id, committee_id)
+        expected = SurveyChoiceManager.add_survey_choice(faculty_email, committee_id)
         actual = (
             dal.DBSession.query(SurveyChoice)
             .filter(
-                SurveyChoice.faculty_id == faculty_id,
+                SurveyChoice.email == faculty_email,
                 SurveyChoice.committee_id == committee_id,
             )
             .first()
         )
 
         assert actual.survey_choice_id == 1
-        assert actual.faculty_id == expected.faculty_id
+        assert actual.email == expected.email
         assert actual.committee_id == expected.committee_id
         assert actual.choice_priority is None
 
