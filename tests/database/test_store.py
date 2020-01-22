@@ -21,7 +21,7 @@ class TestDatabaseStore(unittest.TestCase):
     def test_save_to_database_saves_committee_data_to_database(self):
         data = {
             "committee_preferred": "test-committee-preferred",
-            "choice": None,
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -44,8 +44,8 @@ class TestDatabaseStore(unittest.TestCase):
 
     def test_save_to_database_saves_department_data_to_database(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -68,8 +68,8 @@ class TestDatabaseStore(unittest.TestCase):
 
     def test_save_to_database_saves_faculty_data_to_database(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -89,12 +89,12 @@ class TestDatabaseStore(unittest.TestCase):
         assert faculty_query.count() == 1
         assert faculty_record.full_name == "John Doe"
         assert faculty_record.job_title == "test-job-title"
-        assert faculty_record.senate_division == "test-senate-division"
+        assert faculty_record.senate_division_short_name == "test-senate-division"
 
     def test_save_to_database_saves_survey_choice_data_to_database(self):
         data = {
             "committee_preferred": "test-committee-preferred",
-            "choice": None,
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -115,22 +115,22 @@ class TestDatabaseStore(unittest.TestCase):
             Faculty.full_name == "John Doe"
         )
         faculty_record = faculty_query.first()
-        faculty_id = faculty_record.faculty_id
+        email = faculty_record.email
         survey_choice_query = dal.DBSession.query(SurveyChoice).filter(
-            SurveyChoice.faculty_id == faculty_id,
+            SurveyChoice.email == email,
             SurveyChoice.committee_id == committee_id,
         )
 
         survey_choice_record = survey_choice_query.first()
         assert survey_choice_query.count() == 1
-        assert survey_choice_record.faculty_id == 1
+        assert survey_choice_record.email == "johndoe@mail.com"
         assert survey_choice_record.committee_id == 1
-        assert survey_choice_record.choice_priority is None
+        assert survey_choice_record.choice_id is 1
 
     def test_save_to_database_saves_survey_data_data_to_database(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -147,19 +147,19 @@ class TestDatabaseStore(unittest.TestCase):
         )
         faculty_record = faculty_query.first()
         survey_data_query = dal.DBSession.query(SurveyData).filter(
-            SurveyData.faculty_id == faculty_record.faculty_id
+            SurveyData.email == faculty_record.email
         )
         survey_data_record = survey_data_query.first()
         assert faculty_query.count() == 1
         assert survey_data_query.count() == 1
-        assert survey_data_record.faculty_id == 1
+        assert survey_data_record.email == "johndoe@mail.com"
         assert survey_data_record.is_interested is True
         assert survey_data_record.expertise is None
 
     def test_save_to_database_saves_survey_data_data_to_database_with_expertise(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -176,18 +176,18 @@ class TestDatabaseStore(unittest.TestCase):
         )
         faculty_record = faculty_query.first()
         survey_data_query = dal.DBSession.query(SurveyData).filter(
-            SurveyData.faculty_id == faculty_record.faculty_id
+            SurveyData.email == faculty_record.email
         )
         survey_data_record = survey_data_query.first()
         assert survey_data_query.count() == 1
-        assert survey_data_record.faculty_id == 1
+        assert survey_data_record.email == "johndoe@mail.com"
         assert survey_data_record.is_interested is True
         assert survey_data_record.expertise == "test-expertise"
 
     def test_save_to_database_saves_senate_division_with_short_name(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
@@ -207,8 +207,8 @@ class TestDatabaseStore(unittest.TestCase):
 
     def test_save_to_database_saves_department_association(self):
         data = {
-            "committee_preferred": None,
-            "choice": None,
+            "committee_preferred": "test-committee-preferred",
+            "choice": 1,
             "email": "johndoe@mail.com",
             "name": "John Doe",
             "senate_division": "test-senate-division",
