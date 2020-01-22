@@ -10,6 +10,7 @@ from app.database.entities import SurveyData
 from app.database.entities import SenateDivision
 from app.database.entities import DepartmentAssociations
 
+
 class TestDatabaseStore(unittest.TestCase):
     def setUp(self):
         dal.db_init("sqlite:///:memory:")

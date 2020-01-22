@@ -12,13 +12,13 @@ from app.database.entities import DepartmentAssociations
 
 class CommitteeManager:
     @staticmethod
-    def add_committee(name, description=None):
+    def add_committee(name, description=None, total_slots=None):
         committee_record = (
             dal.DBSession.query(Committee).filter(Committee.name == name).first()
         )
 
         if committee_record is None:
-            committee_record = Committee(name=name, description=description)
+            committee_record = Committee(name=name, description=description, total_slots=total_slots)
             dal.DBSession.add(committee_record)
 
         dal.DBSession.commit()

@@ -25,15 +25,17 @@ class TestDatabaseQueryManager(unittest.TestCase):
         dal.close()
 
     def test_committee_manager_adds_data_to_database(self):
-        expected = CommitteeManager.add_committee("test-committee")
+        expected = CommitteeManager.add_committee("test-committee", None, 10)
         actual = (
             dal.DBSession.query(Committee)
-            .filter(Committee.name == "test-committee")
+            .filter(Committee.name == "test-committee",
+                    Committee.total_slots == 10)
             .first()
         )
 
         assert actual.committee_id == expected.committee_id
         assert actual.name == expected.name
+        assert actual.total_slots == expected.total_slots
 
     def test_department_manager_adds_data_to_database(self):
         expected = DepartmentManager.add_department("test-department")
@@ -174,8 +176,6 @@ class TestDatabaseQueryManager(unittest.TestCase):
         assert actual.expertise == expected.expertise
 
     def test_senate_division_manager_adds_data_to_database(self):
-        senate_division_record = SenateDivisionManager.add_senate_division("TSD", "test-senate-division")
-
         expected = SenateDivisionManager.add_senate_division("TSD", "test-senate-division")
         actual = (
             dal.DBSession.query(SenateDivision)
@@ -200,7 +200,6 @@ class TestDatabaseQueryManager(unittest.TestCase):
             department_id,
         )
         faculty_email = faculty_record.email
-        department_association_record = DepartmentAssociationsManager.add_department_association(faculty_email, department_id)
 
         expected = DepartmentAssociationsManager.add_department_association(faculty_email, department_id)
         actual = (
