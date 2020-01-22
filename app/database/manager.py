@@ -71,7 +71,7 @@ class FacultyManager:
 
 class SurveyChoiceManager:
     @staticmethod
-    def add_survey_choice(email, committee_id, choice_id=None):
+    def add_survey_choice(email, committee_id, choice_id):
         survey_choice_record = (
             dal.DBSession.query(SurveyChoice)
             .filter(
@@ -106,16 +106,16 @@ class SurveyChoiceManager:
 
 class SurveyDataManager:
     @staticmethod
-    def add_survey_data(faculty_id, is_interested, expertise=None):
+    def add_survey_data(email, is_interested, expertise=None):
         survey_data_record = (
             dal.DBSession.query(SurveyData)
-            .filter(SurveyData.faculty_id == faculty_id)
+            .filter(SurveyData.email == email)
             .first()
         )
 
         if survey_data_record is None:
             survey_data_record = SurveyDataManager.create_survey_data(
-                faculty_id, is_interested, expertise
+                email, is_interested, expertise
             )
             dal.DBSession.add(survey_data_record)
 
@@ -124,10 +124,10 @@ class SurveyDataManager:
         return survey_data_record
 
     @staticmethod
-    def create_survey_data(faculty_id, is_interested, expertise):
+    def create_survey_data(email, is_interested, expertise):
         return SurveyData(
             survey_date=datetime.now(),
-            faculty_id=faculty_id,
+            email=email,
             is_interested=is_interested,
             expertise=expertise,
         )
