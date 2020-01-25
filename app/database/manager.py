@@ -82,7 +82,7 @@ class SurveyChoiceManager:
             .first()
         )
 
-        if survey_choice_record is None:
+        if survey_choice_record is None and choice_id is not None:
             survey_choice_record = SurveyChoice(
                 survey_date=datetime.now(),
                 email=email,
