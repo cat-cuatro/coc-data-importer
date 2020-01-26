@@ -6,17 +6,19 @@ from app.database.entities import Department
 from app.database.entities import Faculty
 from app.database.entities import SurveyChoice
 from app.database.entities import SurveyData
+from app.database.entities import SenateDivision
+from app.database.entities import DepartmentAssociations
 
 
 class CommitteeManager:
     @staticmethod
-    def add_committee(name, description=None):
+    def add_committee(name, description=None, total_slots=None):
         committee_record = (
             dal.DBSession.query(Committee).filter(Committee.name == name).first()
         )
 
         if committee_record is None:
-            committee_record = Committee(name=name, description=description)
+            committee_record = Committee(name=name, description=description, total_slots=total_slots)
             dal.DBSession.add(committee_record)
 
         dal.DBSession.commit()
@@ -42,14 +44,14 @@ class DepartmentManager:
 
 class FacultyManager:
     @staticmethod
-    def add_faculty(full_name, email, job_title, senate_division, department_id):
+    def add_faculty(full_name, email, job_title, senate_division):
         faculty_record = (
-            dal.DBSession.query(Faculty).filter(Faculty.full_name == full_name).first()
+            dal.DBSession.query(Faculty).filter(Faculty.email == email).first()
         )
 
         if faculty_record is None:
             faculty_record = FacultyManager.create_faculty(
-                full_name, email, job_title, senate_division, department_id
+                full_name, email, job_title, senate_division
             )
             dal.DBSession.add(faculty_record)
 
@@ -58,35 +60,34 @@ class FacultyManager:
         return faculty_record
 
     @staticmethod
-    def create_faculty(full_name, email, job_title, senate_division, department_id):
+    def create_faculty(full_name, email, job_title, senate_division):
         return Faculty(
             full_name=full_name,
             email=email,
             job_title=job_title,
-            senate_division=senate_division,
-            department_id=department_id,
+            senate_division_short_name=senate_division,
         )
 
 
 class SurveyChoiceManager:
     @staticmethod
-    def add_survey_choice(faculty_id, committee_id, choice_priority=None):
+    def add_survey_choice(email, committee_id, choice_id):
         survey_choice_record = (
             dal.DBSession.query(SurveyChoice)
             .filter(
-                SurveyChoice.faculty_id == faculty_id,
+                SurveyChoice.email == email,
                 SurveyChoice.committee_id == committee_id,
-                SurveyChoice.choice_priority == choice_priority,
+                SurveyChoice.choice_id == choice_id,
             )
             .first()
         )
 
-        if survey_choice_record is None:
+        if survey_choice_record is None and choice_id is not None:
             survey_choice_record = SurveyChoice(
                 survey_date=datetime.now(),
-                faculty_id=faculty_id,
+                email=email,
                 committee_id=committee_id,
-                choice_priority=choice_priority,
+                choice_id=choice_id,
             )
 
             dal.DBSession.add(survey_choice_record)
@@ -94,27 +95,27 @@ class SurveyChoiceManager:
         return survey_choice_record
 
     @staticmethod
-    def create_survey_choice(faculty_id, committee_id, choice_priority):
+    def create_survey_choice(email, committee_id, choice_id):
         return SurveyChoice(
             survey_date=datetime.now(),
-            faculty_id=faculty_id,
+            email=email,
             committee_id=committee_id,
-            choice_priority=choice_priority,
+            choice_id=choice_id,
         )
 
 
 class SurveyDataManager:
     @staticmethod
-    def add_survey_data(faculty_id, is_interested, expertise=None):
+    def add_survey_data(email, is_interested, expertise=None):
         survey_data_record = (
             dal.DBSession.query(SurveyData)
-            .filter(SurveyData.faculty_id == faculty_id)
+            .filter(SurveyData.email == email)
             .first()
         )
 
         if survey_data_record is None:
             survey_data_record = SurveyDataManager.create_survey_data(
-                faculty_id, is_interested, expertise
+                email, is_interested, expertise
             )
             dal.DBSession.add(survey_data_record)
 
@@ -123,10 +124,66 @@ class SurveyDataManager:
         return survey_data_record
 
     @staticmethod
-    def create_survey_data(faculty_id, is_interested, expertise):
+    def create_survey_data(email, is_interested, expertise):
         return SurveyData(
             survey_date=datetime.now(),
-            faculty_id=faculty_id,
+            email=email,
             is_interested=is_interested,
             expertise=expertise,
+        )
+
+
+class SenateDivisionManager:
+    @staticmethod
+    def add_senate_division(short_name, name=None):
+        senate_division_record = (
+            dal.DBSession.query(SenateDivision)
+            .filter(SenateDivision.senate_division_short_name == short_name)
+            .first()
+        )
+
+        if senate_division_record is None:
+            senate_division_record = SenateDivisionManager.create_senate_division(
+                short_name, name
+            )
+            dal.DBSession.add(senate_division_record)
+
+        dal.DBSession.commit()
+
+        return senate_division_record
+
+    @staticmethod
+    def create_senate_division(short_name, name):
+        return SenateDivision(
+            senate_division_short_name=short_name,
+            name=name,
+        )
+
+
+class DepartmentAssociationsManager:
+    @staticmethod
+    def add_department_association(email, department_id):
+        department_association_record = (
+            dal.DBSession.query(DepartmentAssociations)
+            .filter(DepartmentAssociations.email == email,
+                    DepartmentAssociations.department_id == department_id)
+            .first()
+        )
+
+        if department_association_record is None:
+            department_association_record = DepartmentAssociationsManager\
+                .create_department_association(
+                    email, department_id
+                )
+            dal.DBSession.add(department_association_record)
+
+        dal.DBSession.commit()
+
+        return department_association_record
+
+    @staticmethod
+    def create_department_association(email, department_id):
+        return DepartmentAssociations(
+            email=email,
+            department_id=department_id,
         )

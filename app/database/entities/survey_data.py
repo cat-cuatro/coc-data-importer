@@ -13,8 +13,8 @@ class SurveyData(dal.Base):
     __tablename__ = "survey_data"
 
     survey_date = Column("survey_date", DateTime, primary_key=True)
-    faculty_id = Column(
-        "faculty_id", Integer, ForeignKey("faculty.faculty_id"), primary_key=True
+    email = Column(
+        "email", String, ForeignKey("faculty.email"), primary_key=True
     )
     faculty = relationship("Faculty")
     is_interested = Column("is_interested", Boolean, nullable=False)
@@ -23,7 +23,7 @@ class SurveyData(dal.Base):
     def __repr__(self):
         return (
             f"<survey_data(survey_date={self.survey_date}, "
-            f"faculty_id={self.faculty_id}, "
+            f"email={self.email}, "
             f"is_interested={self.is_interested}, "
             f"expertise={self.expertise}, "
         )
