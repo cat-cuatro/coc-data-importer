@@ -11,11 +11,15 @@ from app.database import dal
 class SurveyChoice(dal.Base):
     __tablename__ = "survey_choice"
 
-    survey_date = Column("survey_date", DateTime, ForeignKey("survey_data.survey_date"), primary_key=True)
+    survey_date = Column(
+        "survey_date", DateTime, ForeignKey("survey_data.survey_date"), primary_key=True
+    )
     survey_data = relationship("SurveyData")
     email = Column("email", String, ForeignKey("faculty.email"), primary_key=True)
     faculty = relationship("Faculty")
-    committee_id = Column("committee_id", Integer, ForeignKey("committee.committee_id"), primary_key=True)
+    committee_id = Column(
+        "committee_id", Integer, ForeignKey("committee.committee_id"), primary_key=True
+    )
     committee = relationship("Committee")
     choice_id = Column("choice_id", Integer, primary_key=True)
 

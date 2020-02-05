@@ -6,5 +6,12 @@ from .survey_data import SurveyData
 from .department_associations import DepartmentAssociations
 from .senate_division import SenateDivision
 
-__all__ = [Committee, Department, DepartmentAssociations, Faculty, SenateDivision,
-           SurveyChoice, SurveyData]
+__all__ = [
+    Committee,
+    Department,
+    DepartmentAssociations,
+    Faculty,
+    SenateDivision,
+    SurveyChoice,
+    SurveyData,
+]

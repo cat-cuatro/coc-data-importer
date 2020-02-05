@@ -12,9 +12,11 @@ class Faculty(dal.Base):
     full_name = Column("full_name", String, nullable=False)
     email = Column("email", String, primary_key=True)
     job_title = Column("job_title", String, nullable=False)
-    senate_division_short_name = Column("senate_division", String,
-                                        ForeignKey("senate_division.senate_division_short_name"),
-                                        )
+    senate_division_short_name = Column(
+        "senate_division",
+        String,
+        ForeignKey("senate_division.senate_division_short_name"),
+    )
     senate_division = relationship("SenateDivision")
 
     def __repr__(self):

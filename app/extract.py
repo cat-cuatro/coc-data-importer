@@ -12,4 +12,4 @@ def extract():
     """
     df = pd.read_excel(settings.DATA_XLSX, sheet_name=1)
 
-    return df.to_dict(orient='records')
+    return df.to_dict(orient="records")

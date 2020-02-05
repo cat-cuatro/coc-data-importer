@@ -28,8 +28,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
         expected = CommitteeManager.add_committee("test-committee", None, 10)
         actual = (
             dal.DBSession.query(Committee)
-            .filter(Committee.name == "test-committee",
-                    Committee.total_slots == 10)
+            .filter(Committee.name == "test-committee", Committee.total_slots == 10)
             .first()
         )
 
@@ -50,15 +49,10 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
     def test_faculty_manager_adds_data_to_database(self):
         expected = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         actual = (
-            dal.DBSession.query(Faculty)
-            .filter(Faculty.email == "test-email")
-            .first()
+            dal.DBSession.query(Faculty).filter(Faculty.email == "test-email").first()
         )
 
         assert actual.full_name == expected.full_name
@@ -68,10 +62,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
     def test_survey_choice_manager_adds_data_to_database(self):
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         faculty_email = faculty_record.email
         committee_record = CommitteeManager.add_committee("test-committee")
@@ -83,7 +74,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
             .filter(
                 SurveyChoice.email == faculty_email,
                 SurveyChoice.committee_id == committee_id,
-                SurveyChoice.choice_id == 1
+                SurveyChoice.choice_id == 1,
             )
             .first()
         )
@@ -94,10 +85,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
     def test_survey_choice_manager_adds_data_to_database_with_priority(self):
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         email = faculty_record.email
         committee_record = CommitteeManager.add_committee("test-committee")
@@ -107,8 +95,7 @@ class TestDatabaseQueryManager(unittest.TestCase):
         actual = (
             dal.DBSession.query(SurveyChoice)
             .filter(
-                SurveyChoice.email == email,
-                SurveyChoice.committee_id == committee_id,
+                SurveyChoice.email == email, SurveyChoice.committee_id == committee_id,
             )
             .first()
         )
@@ -119,18 +106,13 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
     def test_survey_data_manager_adds_data_to_database(self):
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         email = faculty_record.email
 
         expected = SurveyDataManager.add_survey_data(email, True)
         actual = (
-            dal.DBSession.query(SurveyData)
-            .filter(SurveyData.email == email)
-            .first()
+            dal.DBSession.query(SurveyData).filter(SurveyData.email == email).first()
         )
 
         assert actual.email == expected.email
@@ -139,18 +121,13 @@ class TestDatabaseQueryManager(unittest.TestCase):
 
     def test_survey_data_manager_adds_data_to_database_with_expertise(self):
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         email = faculty_record.email
 
         expected = SurveyDataManager.add_survey_data(email, True, "test-expertise")
         actual = (
-            dal.DBSession.query(SurveyData)
-            .filter(SurveyData.email == email)
-            .first()
+            dal.DBSession.query(SurveyData).filter(SurveyData.email == email).first()
         )
 
         assert actual.email == expected.email
@@ -158,12 +135,14 @@ class TestDatabaseQueryManager(unittest.TestCase):
         assert actual.expertise == expected.expertise
 
     def test_senate_division_manager_adds_data_to_database(self):
-        expected = SenateDivisionManager.add_senate_division("TSD", "test-senate-division")
+        expected = SenateDivisionManager.add_senate_division(
+            "TSD", "test-senate-division"
+        )
         actual = (
             dal.DBSession.query(SenateDivision)
             .filter(
                 SenateDivision.senate_division_short_name == "TSD",
-                SenateDivision.name == "test-senate-division"
+                SenateDivision.name == "test-senate-division",
             )
             .first()
         )
@@ -175,19 +154,18 @@ class TestDatabaseQueryManager(unittest.TestCase):
         department_record = DepartmentManager.add_department("test-department")
         department_id = department_record.department_id
         faculty_record = FacultyManager.add_faculty(
-            "test-full-name",
-            "test-email",
-            "test-job-title",
-            "test-senate-division",
+            "test-full-name", "test-email", "test-job-title", "test-senate-division",
         )
         faculty_email = faculty_record.email
 
-        expected = DepartmentAssociationsManager.add_department_association(faculty_email, department_id)
+        expected = DepartmentAssociationsManager.add_department_association(
+            faculty_email, department_id
+        )
         actual = (
             dal.DBSession.query(DepartmentAssociations)
             .filter(
                 DepartmentAssociations.email == faculty_email,
-                DepartmentAssociations.department_id == department_id
+                DepartmentAssociations.department_id == department_id,
             )
             .first()
         )
