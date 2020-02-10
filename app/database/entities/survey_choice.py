@@ -1,4 +1,5 @@
-from sqlalchemy import Column
+from sqlalchemy import Date
+from sqlalchemy import Column, PrimaryKeyConstraint, ForeignKeyConstraint
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -10,14 +11,28 @@ from app.database import dal
 
 class SurveyChoice(dal.Base):
     __tablename__ = "survey_choice"
+    __table_args__ = (
+        PrimaryKeyConstraint(
+            "choice_id",
+            "email",
+            "survey_date",
+            "committee_id",
+            name="survey_choice_pkey",
+        ),
+        ForeignKeyConstraint(
+            ["email"], ["faculty.email"], name="survey_choice_email_foreign"
+        ),
+        ForeignKeyConstraint(
+            ["committee_id"],
+            ["committee.committee_id"],
+            name="survey_choice_committee_id_foreign",
+        ),
+    )
 
-    survey_date = Column("survey_date", DateTime, ForeignKey("survey_data.survey_date"), primary_key=True)
-    survey_data = relationship("SurveyData")
-    email = Column("email", String, ForeignKey("faculty.email"), primary_key=True)
-    faculty = relationship("Faculty")
-    committee_id = Column("committee_id", Integer, ForeignKey("committee.committee_id"), primary_key=True)
-    committee = relationship("Committee")
-    choice_id = Column("choice_id", Integer, primary_key=True)
+    choice_id = Column("choice_id", Integer)
+    survey_date = Column("survey_date", Date)
+    email = Column("email", String(255))
+    committee_id = Column("committee_id", Integer)
 
     def __repr__(self):
         return (

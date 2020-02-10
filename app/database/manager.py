@@ -18,7 +18,9 @@ class CommitteeManager:
         )
 
         if committee_record is None:
-            committee_record = Committee(name=name, description=description, total_slots=total_slots)
+            committee_record = Committee(
+                name=name, description=description, total_slots=total_slots
+            )
             dal.DBSession.add(committee_record)
 
         dal.DBSession.commit()
@@ -108,9 +110,7 @@ class SurveyDataManager:
     @staticmethod
     def add_survey_data(email, is_interested, expertise=None):
         survey_data_record = (
-            dal.DBSession.query(SurveyData)
-            .filter(SurveyData.email == email)
-            .first()
+            dal.DBSession.query(SurveyData).filter(SurveyData.email == email).first()
         )
 
         if survey_data_record is None:
@@ -154,10 +154,7 @@ class SenateDivisionManager:
 
     @staticmethod
     def create_senate_division(short_name, name):
-        return SenateDivision(
-            senate_division_short_name=short_name,
-            name=name,
-        )
+        return SenateDivision(senate_division_short_name=short_name, name=name,)
 
 
 class DepartmentAssociationsManager:
@@ -165,16 +162,17 @@ class DepartmentAssociationsManager:
     def add_department_association(email, department_id):
         department_association_record = (
             dal.DBSession.query(DepartmentAssociations)
-            .filter(DepartmentAssociations.email == email,
-                    DepartmentAssociations.department_id == department_id)
+            .filter(
+                DepartmentAssociations.email == email,
+                DepartmentAssociations.department_id == department_id,
+            )
             .first()
         )
 
         if department_association_record is None:
-            department_association_record = DepartmentAssociationsManager\
-                .create_department_association(
-                    email, department_id
-                )
+            department_association_record = DepartmentAssociationsManager.create_department_association(
+                email, department_id
+            )
             dal.DBSession.add(department_association_record)
 
         dal.DBSession.commit()
@@ -183,7 +181,4 @@ class DepartmentAssociationsManager:
 
     @staticmethod
     def create_department_association(email, department_id):
-        return DepartmentAssociations(
-            email=email,
-            department_id=department_id,
-        )
+        return DepartmentAssociations(email=email, department_id=department_id,)

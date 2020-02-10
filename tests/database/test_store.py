@@ -117,8 +117,7 @@ class TestDatabaseStore(unittest.TestCase):
         faculty_record = faculty_query.first()
         email = faculty_record.email
         survey_choice_query = dal.DBSession.query(SurveyChoice).filter(
-            SurveyChoice.email == email,
-            SurveyChoice.committee_id == committee_id,
+            SurveyChoice.email == email, SurveyChoice.committee_id == committee_id,
         )
 
         survey_choice_record = survey_choice_query.first()
@@ -203,7 +202,9 @@ class TestDatabaseStore(unittest.TestCase):
         senate_division_record = senate_division_query.first()
 
         assert senate_division_query.count() == 1
-        assert senate_division_record.senate_division_short_name == "test-senate-division"
+        assert (
+            senate_division_record.senate_division_short_name == "test-senate-division"
+        )
 
     def test_save_to_database_saves_department_association(self):
         data = {
@@ -229,7 +230,9 @@ class TestDatabaseStore(unittest.TestCase):
         )
         department_record = department_query.first()
 
-        department_association_query = dal.DBSession.query(DepartmentAssociations).filter(
+        department_association_query = dal.DBSession.query(
+            DepartmentAssociations
+        ).filter(
             DepartmentAssociations.email == faculty_record.email,
             DepartmentAssociations.department_id == department_record.department_id,
         )
@@ -239,4 +242,3 @@ class TestDatabaseStore(unittest.TestCase):
         assert department_association_query.count() == 1
         assert department_association_record.department_id == 1
         assert department_association_record.email == "johndoe@mail.com"
-

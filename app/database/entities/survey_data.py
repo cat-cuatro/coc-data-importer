@@ -2,7 +2,6 @@ from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
@@ -13,9 +12,7 @@ class SurveyData(dal.Base):
     __tablename__ = "survey_data"
 
     survey_date = Column("survey_date", DateTime, primary_key=True)
-    email = Column(
-        "email", String, ForeignKey("faculty.email"), primary_key=True
-    )
+    email = Column("email", String, ForeignKey("faculty.email"), primary_key=True)
     faculty = relationship("Faculty")
     is_interested = Column("is_interested", Boolean, nullable=False)
     expertise = Column("expertise", String)
